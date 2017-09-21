@@ -12,7 +12,7 @@ int main(){
 	while(!EXIT){
 		// char command[100];
 		char command[1000];// = &comArray;
-		char commandList[100][100][500]={{{'0'}}};
+		char commandList[100][500]={{'\0'}};
 
 		printf("\e[36m""bash@anand~# ""\e[0m"); 
 		fgets(command,1000,stdin);
@@ -27,22 +27,22 @@ int main(){
 		int stringIter = 0;
 		for (int i = 0; i < strlen(command)-1; ++i)
 		{
-			if (command[i]!=' ' && command[i]!='&' && command[i]!='|' && command[i]!='	')
+			if (command[i]!=' ' && command[i]!='&' && command[i]!='|' && command[i]!='	'&& command[i]!='>' && command[i]!='<')
 			{
-				commandList[piper][commandState][stringIter]=command[i];
+				commandList[commandState][stringIter]=command[i];
 				stringIter++;
 				// printf("Break Here.\n");
 				// printf("%c\n", command[i]);
 
 			}else
 			{	
-				printf("%i\n", i);
+				// printf("%i\n", i);
 				stringIter=0;
 				commandState++;
-				if (command[i]=='&'||command[i]=='|')
+				if (command[i]=='&'||command[i]=='|'||command[i]=='>'||command[i]=='<')
 				{
 					// commandState++;
-					commandList[piper][commandState][stringIter]=command[i];
+					commandList[commandState][stringIter]=command[i];
 					commandState++;
 
 				}
@@ -51,9 +51,50 @@ int main(){
 
 			}
 		}
+		int tokenIter=0;
+		char tokenArray[100][100]={{'\0'}};
 		for (int i = 0; i < commandState+1; ++i)
 		{
-			printf("%s\n",commandList[0][i]);
+			// printf("%i\n",strncmp(commandList[i],"",1));
+			if (strncmp(commandList[i],"",1)!=0)
+			{
+				// printf("%s\n",commandList[i]);
+				strcpy(tokenArray[tokenIter],commandList[i]);
+				tokenIter++;
+			} 
+		}
+		int state =0;
+		char printedString[20] = "Command";
+		for (int i = 0; i < tokenIter; ++i)
+		{	
+			if (state==1)
+			{
+				strcpy(printedString,"Argument");
+			}else{
+				strcpy(printedString,"Command");
+				state=1;
+			}
+			if (strcmp(tokenArray[i],"|")==0)
+			{
+				strcpy(printedString,"Pipe");
+				state=0;
+			}
+			if (strcmp(tokenArray[i],">")==0)
+			{
+				strcpy(printedString,"Output redirect");
+				
+			}
+			if (strcmp(tokenArray[i],"<")==0)
+			{
+				strcpy(printedString,"Input redirect");
+				
+			}
+			if (strcmp(tokenArray[i],"&")==0)
+			{
+				strcpy(printedString,"Background");
+				
+			}
+			printf("%s - %s\n",tokenArray[i],printedString );
 		}
 
 		// printf("The arraySize is: %d\n",stringLength);

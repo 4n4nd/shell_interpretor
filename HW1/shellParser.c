@@ -7,28 +7,7 @@
 
 int EXIT = 0;	//Main Global Variable to control the state of the state machine
 
-int executeProcess(int ampersAnd,char* newCommandArg[]){
-	int pid = fork();
-	int status;
-	if (pid==0)
-	{
-		printf("%d\n",execvp(newCommandArg[0], newCommandArg));
 
-	}else
-	{
-
-		if (!ampersAnd)
-		{
-			while (wait(&status) != pid);
-		}else{
-			printf("%d\n",pid);
-		}
-			// printf("I am the Parent with pid:%d \n", pid);
-			
-
-	}
-	return pid;
-}
 int tokenizer(char command[], char * newCommandArg[]){
 	char commandList[100][500]={{'\0'}}; // Command List to tokenize commands including white spaces
 
@@ -73,7 +52,7 @@ int tokenizer(char command[], char * newCommandArg[]){
 		}
 		int tokenIter=0;
 
-		char tokenArray[100][100];//={{NULL}};
+		// char tokenArray[100][100];//={{NULL}};
 
 		// *tokenArray = (char **)malloc(150);
 
@@ -91,6 +70,45 @@ int tokenizer(char command[], char * newCommandArg[]){
 		}
 		return tokenIter;
 }
+int executeProcess(int ampersAnd,char* newCommandArg[]){
+	int pid = fork();
+	int status;
+	if (pid==0)
+	{
+		printf("%d\n",execvp(newCommandArg[0], newCommandArg));
+
+	}else
+	{
+
+		if (!ampersAnd)
+		{
+			while (wait(&status) != pid);
+		}else{
+			printf("%d\n",pid);
+		}
+			// printf("I am the Parent with pid:%d \n", pid);
+			
+
+	}
+	return pid;
+}
+
+int completeProcess(int isPiped, int isBkgrnd, int sizeOfCommand,char* command[], char* inputArg[], int sizeOfInputArg){
+	if (sizeOfInputArg!=0)
+	{
+		
+		// tokenizer(inputArg,argList);
+
+		executeProcess(isBkgrnd,command);
+
+		// printf("size of array = %d and size of extra args is %d",sizeOfCommand,argSize);
+	}else
+	executeProcess(isBkgrnd,command);
+
+	return 0;
+}
+
+
 
 int main(){
 	int myInt = 0;
@@ -227,7 +245,13 @@ int main(){
 		{
 			
 		}
-		executeProcess(ampersAnd,newCommandArg);
+		char args[] = "-l -l -l";
+		char* inputArg[100]={"-l","-l"};
+		// int inputArgSize = tokenizer(args,inputArg);
+		printf("%s\n",*inputArg);
+		int inputArgSize=0;
+		completeProcess(0,ampersAnd,tokenIter,newCommandArg,inputArg,inputArgSize);
+		// executeProcess(ampersAnd,newCommandArg);
 		
 		
 		

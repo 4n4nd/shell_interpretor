@@ -1,1 +1,15 @@
-This is a test Submission
+
+
+
+
+A new shell interpreter. (A lot of new bugs in it)
+-Learned how to use exec and fork
+-I am killing the parent process somewhere, need to look for it can't find it.
+-file descriptors are a little confusing to work with first, but got used to them.
+
+
+TODO
+  NOT KILL THE PARENT PROCESS
+  make the Shell prompt look better (more colorful)
+  add file redirectors (>> and <<)
+  Piping works fine (for now)
